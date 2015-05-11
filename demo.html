@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js"></script>  
+</head>
+<body>
+  <button data-bind="message: {topic: 'topicName', event: 'click'} ">Send Message</button>
+  <script>    
+    ko.bindingHandlers.message = {
+      init: function(element, valueAccessor) {
+        var event = valueAccessor().event;
+        var topic = valueAccessor().topic;        
+        element.onclick = function() { 
+          postbox.notifySubscribers("", topic); 
+        }        
+      }
+    };
+
+    window.postbox = new ko.subscribable();
+    function AppViewModel() {
+      postbox.subscribe(function() {
+        alert("hello");
+      }, self, "topicName");
+    }
+    ko.applyBindings(new AppViewModel());
+  </script>
+</body>
+</html>
